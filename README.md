@@ -1,5 +1,5 @@
 # React + Vite
-✈️ Travel Nusantara: Website Pemesanan Wisata Jawa, Bali, & LombokIni adalah proyek aplikasi Full-Stack untuk manajemen dan pemesanan paket wisata di wilayah Jawa, Bali, dan Lombok. Dibangun menggunakan teknologi modern (MERN-stack inspired) untuk kecepatan, skalabilitas, dan pengalaman pengguna yang optimal.✨ 
+✈️ Travel Nusantara: Website Pemesanan Wisata Jawa, Bali, & Lombok Ini adalah proyek aplikasi Full-Stack untuk manajemen dan pemesanan paket wisata di wilayah Jawa, Bali, dan Lombok. Dibangun menggunakan teknologi modern (MERN-stack inspired) untuk kecepatan, skalabilitas, dan pengalaman pengguna yang optimal.✨ 
 Fitur Utama (Core Features)
 Website ini mencakup alur lengkap dari pencarian paket oleh Client hingga verifikasi laporan oleh Admin.
 RoleFiturStatusPublik/ClientPencarian & Tampilan Detail Paket✅
@@ -13,20 +13,6 @@ AdminVerifikasi Pembayaran (Ubah Status)✅
 AdminEkspor Laporan ke Excel (.xlsx)✅
 
 💻 Teknologi yang Digunakan (Tech Stack)BagianTeknologiDetailFrontendReact.js (dengan Vite)Component-based UI dan navigasi (React Router DOM).StylingTailwind CSSUtility-first CSS untuk desain yang responsive dan cepat. Font Oswald digunakan untuk styling utama.BackendNode.js (dengan Express)RESTful API untuk logika bisnis dan routing.DatabaseMySQL (via XAMPP)Database relasional untuk menyimpan data Pemesanan, User, dan Paket Wisata.KeamananJWT & BcryptjsOtentikasi sesi dan hashing password.File HandlingMulterMiddleware untuk menangani upload file (bukti pembayaran).📁 Struktur Proyek (Project Structure)Proyek ini menggunakan struktur Full-Stack Separated:Travel-Nusantara
-
-├── backend/                  <-- Server (Node.js, Express, MySQL)
-│   ├── routes/               (auth, booking, admin, packages)
-│   ├── middleware/           (auth.js, adminAuth.js)
-│   ├── uploads/              (Folder penyimpanan Bukti Pembayaran)
-│   ├── server.js             (File utama)
-│   └── .env                  (Kredensial DB dan JWT)
-│
-└── web/                      <-- Frontend (React, Vite, Tailwind CSS)
-    ├── src/
-    │   ├── components/       (Header, Login, PackageForm, AdminDashboard, dll.)
-    │   ├── App.jsx           (Root Router)
-    │   └── main.jsx
-    └── package.json          (Dependencies Frontend)
     
 🚀 Panduan Instalasi dan Menjalankan ProyekIkuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal.
 PrasyaratNode.js (LTS Version)MySQL Server (XAMPP/WAMP/MAMP harus running)
