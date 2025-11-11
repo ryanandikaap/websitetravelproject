@@ -11,8 +11,6 @@ const PackageDetail = () => {
     const [packageData, setPackageData] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    
-    // Ambil data user di dalam try/catch
     let user = null;
     try {
         const userString = localStorage.getItem('user');
@@ -20,7 +18,6 @@ const PackageDetail = () => {
             user = JSON.parse(userString);
         }
     } catch (e) {
-        // Jika gagal parse (data Local Storage rusak), user tetap null
         console.error("Gagal parsing user data dari Local Storage:", e);
     } 
 
@@ -61,7 +58,6 @@ const PackageDetail = () => {
         return <div className="text-center py-20 text-xl font-oswald">Memuat detail paket...</div>;
     }
 
-    // 🛑 CRITICAL SAFETY CHECK
     if (!packageData || !packageData.id) { 
         return (
             <div className="text-center py-20">
@@ -73,7 +69,6 @@ const PackageDetail = () => {
         );
     }
 
-    // ✅ Destrukturisasi sekarang aman
     const { id, nama, deskripsi, lokasi, harga, durasi, gambar_url } = packageData;
 
     return (

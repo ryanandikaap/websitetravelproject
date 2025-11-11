@@ -116,6 +116,11 @@ const Login = () => {
             {loading ? 'Memproses...' : 'LOGIN'}
           </button>
         </form>
+
+        {/* 🚀 PERUBAHAN: Tambahkan link Forgot Password di atas link Daftar */}
+        <p className="text-center text-sm mt-4 text-red-600">
+          <a href="/forgot-password" className="text-red-500 hover:text-blue-600 hover:underline font-semibold">Lupa Password?</a>
+        </p>
         
         <p className="text-center text-sm mt-4 text-gray-600">
           Belum punya akun? <a href="/register" className="text-amber-500 hover:underline font-semibold">Daftar di sini</a>

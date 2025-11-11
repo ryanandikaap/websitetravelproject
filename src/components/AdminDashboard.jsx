@@ -108,7 +108,6 @@ const AdminDashboard = ({ user }) => {
     XLSX.writeFile(wb, "Laporan_Pemesanan_Travel.xlsx");
   };
 
-  // 🚀 Statistik untuk kartu ringkasan
   const totalOrders = allBookings.length;
   const pendingOrders = allBookings.filter(b => b.status_pembayaran === 'Pending').length;
   const confirmedOrders = allBookings.filter(b => b.status_pembayaran === 'Confirmed').length;

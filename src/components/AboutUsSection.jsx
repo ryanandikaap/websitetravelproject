@@ -2,7 +2,7 @@
 import React from 'react';
 
 const AboutUsSection = () => {
-  const aboutImagePath = '/gambarorg.jpg'; // Path gambar Anda
+  const aboutImagePath = '/gambarorg.jpg'; 
 
   return (
     <section id="about" className="py-20 bg-white text-gray-800">

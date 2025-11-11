@@ -7,7 +7,10 @@ import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import MainLayout from './components/MainLayout';
 import BookingForm from './components/BookingForm'; 
-import PackageDetail from './components/PackageDetail';             
+import PackageDetail from './components/PackageDetail';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword'; 
+import PaymentConfirmation from './components/PaymentConfirmation';            
 
 const ProtectedLayout = ({ element: Element }) => {
     const token = localStorage.getItem('token');
@@ -30,6 +33,9 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} /> 
         <Route path="/admin/dashboard" element={<AdminDashboard />} /> 
         <Route path="/booking" element={<BookingForm />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/payment-confirm" element={<PaymentConfirmation />} />
       </Routes>
     </BrowserRouter>
   );
