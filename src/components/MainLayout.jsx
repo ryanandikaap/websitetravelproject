@@ -4,6 +4,7 @@ import Header from './Header';
 import HeroSection from './HeroSection';
 import AboutUsSection from './AboutUsSection';
 import DestinationPackages from './DestinationPackages';
+import PhotoGallerySection from './PhotoGallerySection';
 
 
 const MainLayout = () => {
@@ -15,6 +16,7 @@ const MainLayout = () => {
         <HeroSection />          {/* Destinasi Awal */}
         <AboutUsSection />       {/* Tentang Kami */}
         <DestinationPackages />  {/* Katalog Paket */}
+        <PhotoGallerySection />
         {/* Tambahkan bagian lain di sini (Review, Contact, Footer, dll.) */}
       </main>
     </div>

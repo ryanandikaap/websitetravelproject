@@ -10,7 +10,8 @@ import BookingForm from './components/BookingForm';
 import PackageDetail from './components/PackageDetail';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword'; 
-import PaymentConfirmation from './components/PaymentConfirmation';            
+import PaymentConfirmation from './components/PaymentConfirmation';
+import PhotoGallery from './components/PhotoGallery';          
 
 const ProtectedLayout = ({ element: Element }) => {
     const token = localStorage.getItem('token');
@@ -36,6 +37,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/payment-confirm" element={<PaymentConfirmation />} />
+        <Route path="/photo" element={<PhotoGallery />} />
+        
       </Routes>
     </BrowserRouter>
   );

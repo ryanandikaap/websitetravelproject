@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FaUserShield, FaClipboardList, FaFileExcel, FaChartBar, 
-  FaCheckCircle, FaClock, FaTimesCircle, FaSignOutAlt, FaPlus, FaBoxOpen, FaFileImage
+  FaCheckCircle, FaClock, FaTimesCircle, FaSignOutAlt, FaPlus, FaBoxOpen, FaFileImage, FaWhatsapp
 } from 'react-icons/fa';
 import * as XLSX from 'xlsx'; 
 import PackageForm from './PackageForms'; 
+import GalleryManager from './GalleryManager';
 
 const API_BOOKINGS_URL = 'http://localhost:5000/api/admin/bookings'; 
 const API_PACKAGES_URL = 'http://localhost:5000/api/packages';
@@ -70,14 +71,14 @@ const AdminDashboard = ({ user }) => {
 
       if (response.ok) {
         alert(`Status berhasil diubah menjadi ${newStatus}`);
-        fetchAllBookings(); 
+        fetchAllContent(); 
       } else {
         const errorData = await response.json();
         alert(`Gagal update status: ${errorData.message || 'Terjadi kesalahan.'}`);
       }
     } catch (error) {
       console.error("Error update status:", error);
-      alert("Terjadi kesalahan saat update status.");
+      alert("done.");
     }
   };
 
@@ -156,7 +157,10 @@ const AdminDashboard = ({ user }) => {
           
           {/* KOLOM KIRI (1/3): FORM TAMBAH PAKET */}
           <div className="lg:col-span-1">
-            <PackageForm onPackageAdded={fetchAllContent} /> 
+            <PackageForm onPackageAdded={fetchAllContent} />
+          <div className="mt-6"> 
+            <GalleryManager onPhotoChange={fetchAllContent} />
+          
             
             {/* Daftar Paket Saat Ini (Tampilan Ringkas) */}
             <div className="bg-white p-6 rounded-xl shadow-md mt-6 border-l-4 border-amber-500">
@@ -168,6 +172,7 @@ const AdminDashboard = ({ user }) => {
                     {packages.length > 5 && <li>... dan {packages.length - 5} lainnya</li>}
                 </ul>
             </div>
+          </div>
           </div>
           
           {/* KOLOM KANAN (2/3): LAPORAN PEMESANAN MASUK */}
@@ -186,64 +191,88 @@ const AdminDashboard = ({ user }) => {
                 </button>
             </div>
             
-            {/* Tabel Pemesanan */}
-            {loading ? (
-                <div className="text-center py-10 bg-white rounded-xl shadow-md"><p className="text-gray-600 text-lg">Memuat data pesanan...</p></div>
-            ) : allBookings.length === 0 ? (
-                <div className="text-center py-10 bg-white rounded-xl shadow-md border-2 border-dashed border-gray-300">
-                    <FaClipboardList className="text-5xl text-gray-400 mx-auto mb-3" />
-                    <p className="text-xl text-gray-600 font-semibold">Belum ada pemesanan yang masuk.</p>
-                </div>
-            ) : (
-              <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-purple-600 text-white">
-                    <tr>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">ID</th>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">User</th>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Email User</th>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Paket</th>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Tgl Perjalanan</th>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Jumlah</th>
-                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Total Harga</th>
-                      <th className="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wider">Status</th>
-                      <th className="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wider">Aksi</th>
-                      <th className="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wider">Bukti Pembayaran</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {allBookings.map((booking) => (
-                      <tr key={booking.pemesanan_id} className="hover:bg-purple-50 transition duration-150 ease-in-out">
-                        <td className="py-3 px-4 text-sm text-gray-800">{booking.pemesanan_id}</td>
-                        <td className="py-3 px-4 text-sm text-gray-800 font-medium">{booking.nama_user}</td>
-                        <td className="py-3 px-4 text-sm text-gray-600">{booking.email_user}</td>
-                        <td className="py-3 px-4 text-sm text-gray-800">{booking.nama_paket}</td>
-                        <td className="py-3 px-4 text-sm text-gray-600">{booking.tanggal_perjalanan}</td>
-                        <td className="py-3 px-4 text-sm text-gray-800">{booking.jumlah_peserta}</td>
-                        <td className="py-3 px-4 text-sm text-green-700 font-bold">Rp {Number(booking.total_harga).toLocaleString('id-ID')}</td>
-                        <td className="py-3 px-4 text-center">
-                          <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
-                            booking.status_pembayaran === 'Confirmed' ? 'bg-green-100 text-green-800' : 
-                            booking.status_pembayaran === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                            'bg-red-100 text-red-800' 
-                          }`}>
-                            {booking.status_pembayaran === 'Confirmed' && <FaCheckCircle className="mr-1" />}
-                            {booking.status_pembayaran === 'Pending' && <FaClock className="mr-1" />}
-                            {booking.status_pembayaran === 'Cancelled' && <FaTimesCircle className="mr-1" />}
-                            {booking.status_pembayaran}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <button
-                            onClick={() => handleUpdateStatus(booking.pemesanan_id, booking.status_pembayaran)}
-                            className={`py-1 px-3 text-xs font-semibold rounded-md transition ${
-                              booking.status_pembayaran === 'Confirmed' ? 'bg-blue-500 hover:bg-blue-600 text-white' : 
-                              'bg-green-500 hover:bg-green-600 text-white'
-                            }`}
-                          >
-                            {booking.status_pembayaran === 'Confirmed' ? 'Set Pending' : 'Set Confirmed'}
-                          </button>
-                        </td>
+           {/* Tabel Pemesanan */}
+            {loading ? (
+                <div className="text-center py-10 bg-white rounded-xl shadow-md"><p className="text-gray-600 text-lg">Memuat data pesanan...</p></div>
+            ) : allBookings.length === 0 ? (
+                <div className="text-center py-10 bg-white rounded-xl shadow-md border-2 border-dashed border-gray-300">
+                    <FaClipboardList className="text-5xl text-gray-400 mx-auto mb-3" />
+                    <p className="text-xl text-gray-600 font-semibold">Belum ada pemesanan yang masuk.</p>
+                </div>
+            ) : (
+              <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-purple-600 text-white">
+                    <tr>
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">ID</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">User</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Email User</th>
+                      {/* --- PENAMBAHAN HEADER NO. WA --- */}
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">No. WA User</th>
+                      {/* -------------------------------- */}
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Paket</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Tgl Perjalanan</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Jumlah</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Total Harga</th>
+                      <th className="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wider">Status</th>
+                      <th className="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wider">Aksi</th>
+                      <th className="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wider">Bukti Pembayaran</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {allBookings.map((booking) => (
+                      <tr key={booking.pemesanan_id} className="hover:bg-purple-50 transition duration-150 ease-in-out">
+                        <td className="py-3 px-4 text-sm text-gray-800">{booking.pemesanan_id}</td>
+                        <td className="py-3 px-4 text-sm text-gray-800 font-medium">{booking.nama_user}</td>
+                        <td className="py-3 px-4 text-sm text-gray-600">{booking.email_user}</td>
+                        
+                        {/* --- PERBAIKAN: Menggunakan booking.nomor_telepon_user --- */}
+                        {/* --- PERBAIKAN: Menggunakan booking.nomor_telepon_user --- */}
+                        <td className="py-3 px-4 text-sm text-gray-600">
+                            {booking.nomor_telepon_user ? ( // Properti diperbaiki di sini
+                                <a 
+                                    href={`https://wa.me/${booking.nomor_telepon_user}`} // Properti diperbaiki di sini
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-green-600 hover:text-green-800 flex items-center font-medium"
+                                >
+                                    {/* Anda harus mengimpor FaWhatsapp di bagian atas file */}
+                                    <FaWhatsapp className="mr-1 text-base" />
+                                    {booking.nomor_telepon_user} // Properti diperbaiki di sini
+                                </a>
+                            ) : (
+                                <span className="text-gray-400">-</span>
+                            )}
+                        </td>
+                        {/* -------------------------------- */}
+                        
+                        <td className="py-3 px-4 text-sm text-gray-800">{booking.nama_paket}</td>
+                        <td className="py-3 px-4 text-sm text-gray-600">{booking.tanggal_perjalanan}</td>
+                        <td className="py-3 px-4 text-sm text-gray-800">{booking.jumlah_peserta}</td>
+                        <td className="py-3 px-4 text-sm text-green-700 font-bold">Rp {Number(booking.total_harga).toLocaleString('id-ID')}</td>
+                        <td className="py-3 px-4 text-center">
+                          <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                            booking.status_pembayaran === 'Confirmed' ? 'bg-green-100 text-green-800' : 
+                            booking.status_pembayaran === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
+                            'bg-red-100 text-red-800' 
+                          }`}>
+                            {booking.status_pembayaran === 'Confirmed' && <FaCheckCircle className="mr-1" />}
+                            {booking.status_pembayaran === 'Pending' && <FaClock className="mr-1" />}
+                            {booking.status_pembayaran === 'Cancelled' && <FaTimesCircle className="mr-1" />}
+                            {booking.status_pembayaran}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <button
+                            onClick={() => handleUpdateStatus(booking.pemesanan_id, booking.status_pembayaran)}
+                            className={`py-1 px-3 text-xs font-semibold rounded-md transition ${
+                              booking.status_pembayaran === 'Confirmed' ? 'bg-blue-500 hover:bg-blue-600 text-white' : 
+                              'bg-green-500 hover:bg-green-600 text-white'
+                            }`}
+                          >
+                            {booking.status_pembayaran === 'Confirmed' ? 'Set Pending' : 'Set Confirmed'}
+                          </button>
+                        </td>
                         {/* 🚀 KOLOM BUKTI PEMBAYARAN */}
                         <td className="py-3 px-4 text-center">
                           {booking.bukti_bayar_url ? (

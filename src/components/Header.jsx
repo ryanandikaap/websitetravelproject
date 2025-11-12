@@ -48,7 +48,7 @@ const Header = () => {
   const renderNavItems = (items) => (
     items.map((item) => {
       const lowerItem = item.toLowerCase();
-      if (['about', 'destination'].includes(lowerItem)) {
+      if (['about', 'destination', 'photo'].includes(lowerItem)) {
           return (
               <a 
                   key={item} 
